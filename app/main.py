@@ -1,5 +1,6 @@
 import datetime
 
+import uvicorn
 from fastapi import FastAPI, Depends
 from sqlalchemy.orm import Session
 
@@ -47,3 +48,6 @@ async def root(db: Session = Depends(get_db)):
     db.add(db_greeting)
     db.commit()
     return db.query(models.Greeting).all()
+
+if __name__ == "__main__":
+    uvicorn.run(server, host="0.0.0.0", port=8001)

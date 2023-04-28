@@ -1,0 +1,40 @@
+version: "3.8"
+
+services:
+  server:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8000:8000"
+    volumes:
+      - .:/app
+    env_file:
+      - ./.env
+    depends_on:
+      db:
+        condition: service_healthy
+    restart: always
+
+  db:
+    image: "postgres:15.2"
+    env_file:
+      - ./.env
+    restart: always
+    volumes:
+    # Store the db data on the host machine, not inside the container.
+    # Put a better path than /tmp!
+      - /tmp/postgresql:/var/lib/postgresql
+      - /tmp/postgresql/data:/var/lib/postgresql/data
+    # Wait for the postgres db to be ready, before starting the web server.
+    # This may not be working actually :/
+    # Additional logic is done in the web server (main.py) to lazily create
+    # the db schema. On each incoming request, if the schema hasn't been created,
+    # it'll try to create it. If the db isn't ready yet, it fails with a 500. :/
+    # If the db is ready, it creates the schema once and for all.
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready", "-d", "app"]
+      interval: 5s
+      timeout: 10s
+      retries: 10
+      start_period: 80s

@@ -23,6 +23,8 @@ services:
     env_file:
       - ./.env
     restart: always
+    ports:
+      - "9432:5432"
     volumes:
     # Store the db data on the host machine, not inside the container.
     # Put a better path than /tmp!

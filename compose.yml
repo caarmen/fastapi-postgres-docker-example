@@ -7,10 +7,14 @@ services:
       dockerfile: Dockerfile
     ports:
       - "8000:8000"
+      - "5678:5678" # for DEBUG=debugpy
+      - "5555:5555" # for DEBUG=web-pdb
     volumes:
       - .:/app
     env_file:
       - ./.env
+    environment:
+      - DEBUG # can be empty, debugpy, or pdb
     depends_on:
       - db
       # Conditional dependency maybe not working, see healthcheck below.

@@ -77,6 +77,27 @@ inside the docker container, which runs on port 8000.
 However, if you don't want two webapps running, you can make sure that in
 docker, only the db is started, with  `docker compose up --build db`.
 
+### Option 2 - Attach to the debugger inside the container, with vscode (with debugpy)
+* Rerun everything with `DEBUG` set to `debugpy` in the environment:
+    ```shell
+    env DEBUG=debugpy docker compose up --build
+    ```
+* Inside vscode, launch the `Python: Remote Attach` configuration.
+* Also, in vscode, you can use "Remote explorer" to browse the files inside the container.
+  That will open a new window. You can also launch the debugger from the new window.
+
+### Option 3 - Web-pdb
+* Add the following to the line of code you want to debug:
+    ```python
+    import web_pdb; web_pdb.set_trace()
+    ```
+* Rerun everything with `DEBUG` set to `pdb` in the environment:
+    ```shell
+    env DEBUG=pdb docker compose up --build
+    ```
+* Open http://localhost:5555/ to see the web-pdb interface.
+
+
 ## References
 * [SQL (Relational) Databases in FastAPI](https://fastapi.tiangolo.com/tutorial/sql-databases/).
 * [FastAPI, Docker, and Postgres](https://medium.com/@krishnardt365/fastapi-docker-and-postgres-91943e71be92), by Krish Na.

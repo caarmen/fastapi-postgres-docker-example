@@ -25,6 +25,29 @@ Open the root endpoint at http://localhost:8000/
 
 Open the api documentation at http://localhost:8000/redoc
 
+## Inspecting the database
+
+Connect to the database by opening an interactive session to
+the docker container for the db:
+
+```
+docker exec -it fastapi-postgres-docker-example-db-1 /usr/bin/psql --username=postgres --dbname=app
+```
+
+Example session to list all the greetings:
+```
+% docker exec -it fastapi-postgres-docker-example-db-1 /usr/bin/psql --username=postgres --dbname=app
+
+psql (15.2 (Debian 15.2-1.pgdg110+1))
+Type "help" for help.
+
+app=# select * from greetings;
+ id |            text            
+----+----------------------------
+  1 | 2023-04-28 15:18:02.150314
+  2 | 2023-04-28 15:31:12.426155
+(2 rows)
+```
 
 ## References
 * [SQL (Relational) Databases in FastAPI](https://fastapi.tiangolo.com/tutorial/sql-databases/).

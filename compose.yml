@@ -12,8 +12,10 @@ services:
     env_file:
       - ./.env
     depends_on:
-      db:
-        condition: service_healthy
+      - db
+      # Conditional dependency maybe not working, see healthcheck below.
+      # db:
+      #   condition: service_healthy
     restart: always
 
   db:
@@ -32,9 +34,10 @@ services:
     # the db schema. On each incoming request, if the schema hasn't been created,
     # it'll try to create it. If the db isn't ready yet, it fails with a 500. :/
     # If the db is ready, it creates the schema once and for all.
-    healthcheck:
-      test: ["CMD-SHELL", "pg_isready", "-d", "app"]
-      interval: 5s
-      timeout: 10s
-      retries: 10
-      start_period: 80s
+
+    # healthcheck:
+    #  test: ["CMD-SHELL", "pg_isready", "-d", "app"]
+    #  interval: 5s
+    #  timeout: 10s
+    #  retries: 10
+    #  start_period: 80s
